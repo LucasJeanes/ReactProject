@@ -31,7 +31,7 @@ export function GlobalContextProvider(props) {
                 'Content-Type': 'application/json',
             },
         });
-        let data = await response.json();
+        const data = await response.json();
         setGlobals((previousGlobals) => {
             const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
             newGlobals.meetings = data.meetings;
@@ -41,8 +41,7 @@ export function GlobalContextProvider(props) {
     }
 
     async function editGlobalData(command) {
-        // Handle hiding the menu
-        if (command.cmd == 'hideHamMenu') {
+        if (command.cmd === 'hideHamMenu') {
             setGlobals((previousGlobals) => {
                 const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
                 newGlobals.hideHamMenu = command.newVal;
@@ -50,8 +49,7 @@ export function GlobalContextProvider(props) {
             });
         }
 
-        // Handle adding a new meetup
-        if (command.cmd == 'addMeeting') {
+        if (command.cmd === 'addMeeting') {
             const response = await fetch('/api/new-meetup', {
                 method: 'POST',
                 body: JSON.stringify(command.newVal),
@@ -59,10 +57,10 @@ export function GlobalContextProvider(props) {
                     'Content-Type': 'application/json',
                 },
             });
-            const data = await response.json(); // Verify response success
+            const data = await response.json(); // Verify success
             setGlobals((previousGlobals) => {
                 const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
-                newGlobals.meetings.push(command.newVal);
+                newGlobals.meetings.push(command.newVal); // Add the new meeting
                 return newGlobals;
             });
         }
@@ -81,7 +79,6 @@ export function GlobalContextProvider(props) {
 }
 
 export default GlobalContext;
-
 
 
 
