@@ -6,7 +6,7 @@ function MeetupItem(props) {
   const router = useRouter();
 
   function showDetailsHandler() {
-    router.push('/' + props.id);
+    router.push('/' + props.id); // Navigate to details page using the ID
   }
 
   return (
@@ -18,6 +18,7 @@ function MeetupItem(props) {
         <div className={classes.content}>
           <h3>{props.title}</h3>
           <address>{props.address}</address>
+          {props.category && <p>Category: {props.category}</p>} {/* Display category */}
         </div>
         <div className={classes.actions}>
           <button onClick={showDetailsHandler}>Show Details</button>
