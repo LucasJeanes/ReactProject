@@ -4,6 +4,95 @@
 // - makes debugging etc so much easier
 // - all external connections still have to go through /api routes 
 
+
+// globalContext.js
+import { createContext, useState, useEffect } from 'react';
+
+const GlobalContext = createContext();
+
+export function GlobalContextProvider(props) {
+    const [globals, setGlobals] = useState({
+        aString: 'init val',
+        count: 0,
+        hideHamMenu: true,
+        meetings: [], // Contains all meetups
+        dataLoaded: false,
+    });
+
+    useEffect(() => {
+        getAllMeetings();
+    }, []);
+
+    async function getAllMeetings() {
+        const response = await fetch('/api/get-meetings', {
+            method: 'POST',
+            body: JSON.stringify({ meetups: 'all' }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        let data = await response.json();
+        setGlobals((previousGlobals) => {
+            const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+            newGlobals.meetings = data.meetings;
+            newGlobals.dataLoaded = true;
+            return newGlobals;
+        });
+    }
+
+    async function editGlobalData(command) {
+        // Handle hiding the menu
+        if (command.cmd == 'hideHamMenu') {
+            setGlobals((previousGlobals) => {
+                const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+                newGlobals.hideHamMenu = command.newVal;
+                return newGlobals;
+            });
+        }
+
+        // Handle adding a new meetup
+        if (command.cmd == 'addMeeting') {
+            const response = await fetch('/api/new-meetup', {
+                method: 'POST',
+                body: JSON.stringify(command.newVal),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json(); // Verify response success
+            setGlobals((previousGlobals) => {
+                const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+                newGlobals.meetings.push(command.newVal);
+                return newGlobals;
+            });
+        }
+    }
+
+    const context = {
+        updateGlobals: editGlobalData,
+        theGlobalObject: globals, // Access meetings here
+    };
+
+    return (
+        <GlobalContext.Provider value={context}>
+            {props.children}
+        </GlobalContext.Provider>
+    );
+}
+
+export default GlobalContext;
+
+
+
+
+
+
+
+
+
+
+
+/*
 import { createContext, useState, useEffect } from 'react'
 
 const GlobalContext = createContext()
@@ -62,6 +151,8 @@ export function GlobalContextProvider(props) {
         {props.children}
     </GlobalContext.Provider>
 }
+    
 
 
 export default GlobalContext
+*/
