@@ -1,10 +1,9 @@
 import classes from './MainNavigation.module.css';
 import Link from 'next/link';
-import HamMenu from "../generic/HamMenu";
-import HamMenuFAB from "../generic/HamMenuFAB";
+import HamMenu from '../generic/HamMenu';
+import HamMenuFAB from '../generic/HamMenuFAB';
 import { useContext } from 'react';
-import GlobalContext from "../../pages/store/globalContext";
-import HamMenuContent from "./HamMenuContent";
+import GlobalContext from '../../pages/store/globalContext';
 
 function MainNavigation() {
     const globalCtx = useContext(GlobalContext);
@@ -15,22 +14,21 @@ function MainNavigation() {
 
     return (
         <header className={classes.header}>
-            <HamMenuContent contents={[]} />
-            <HamMenu toggleMenuHide={() => toggleMenuHide()} />
-            <HamMenuFAB toggleMenuHide={() => toggleMenuHide()} />
+            <HamMenu toggleMenuHide={toggleMenuHide} />
+            <HamMenuFAB toggleMenuHide={toggleMenuHide} />
             <nav>
                 <ul>
                     <li>
-                        <Link href='/'>All Meetups</Link> ({globalCtx.theGlobalObject.meetings.length})
+                        <Link href="/">All Meetups</Link> ({globalCtx.theGlobalObject.meetings.length})
                     </li>
                     <li>
-                        <Link href='/technology'>Technology</Link>
+                        <Link href="/technology">Technology</Link>
                     </li>
                     <li>
-                        <Link href='/gaming'>Gaming</Link>
+                        <Link href="/gaming">Gaming</Link>
                     </li>
                     <li>
-                        <Link href='/new-meetup'>Add New Meetup</Link>
+                        <Link href="/new-meetup">Add New Meetup</Link>
                     </li>
                 </ul>
             </nav>
