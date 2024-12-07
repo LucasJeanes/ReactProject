@@ -3,11 +3,10 @@ import { useRef } from 'react';
 import Card from '../ui/Card';
 import classes from './NewMeetupForm.module.css';
 
-function NewItemForm(props) {
+function NewMeetupForm(props) {
   const titleInputRef = useRef();
   const imageInputRef = useRef();
-  const priceInputRef = useRef(); // Added for price
-  const categoryInputRef = useRef(); // Added for category
+  const addressInputRef = useRef();
   const descriptionInputRef = useRef();
 
   function submitHandler(event) {
@@ -15,40 +14,34 @@ function NewItemForm(props) {
 
     const enteredTitle = titleInputRef.current.value;
     const enteredImage = imageInputRef.current.value;
-    const enteredPrice = priceInputRef.current.value;
-    const enteredCategory = categoryInputRef.current.value;
+    const enteredAddress = addressInputRef.current.value;
     const enteredDescription = descriptionInputRef.current.value;
 
-    const itemData = {
-      itemId: enteredTitle, // Using title as unique ID for now
+    const meetupData = {
+      meetingId: enteredTitle,
       title: enteredTitle,
       image: enteredImage,
-      price: +enteredPrice, // Convert price to a number
-      category: enteredCategory,
+      address: enteredAddress,
       description: enteredDescription,
     };
 
-    props.onAddMeetup(itemData); // Calls the parent function
+    props.onAddMeetup(meetupData);
   }
 
   return (
     <Card>
       <form className={classes.form} onSubmit={submitHandler}>
         <div className={classes.control}>
-          <label htmlFor='title'>Item Name (must be unique: it's the item ID)</label>
+          <label htmlFor='title'>Meetup Title (must be unique: it's the meeting ID)</label>
           <input type='text' required id='title' ref={titleInputRef} />
         </div>
         <div className={classes.control}>
-          <label htmlFor='image'>Item Image URL</label>
+          <label htmlFor='image'>Meetup Image</label>
           <input type='url' required id='image' ref={imageInputRef} />
         </div>
         <div className={classes.control}>
-          <label htmlFor='price'>Price</label>
-          <input type='number' required id='price' ref={priceInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor='category'>Category</label>
-          <input type='text' required id='category' ref={categoryInputRef} />
+          <label htmlFor='address'>Address</label>
+          <input type='text' required id='address' ref={addressInputRef} />
         </div>
         <div className={classes.control}>
           <label htmlFor='description'>Description</label>
@@ -60,11 +53,11 @@ function NewItemForm(props) {
           ></textarea>
         </div>
         <div className={classes.actions}>
-          <button>Add Item</button>
+          <button>Add Meetup</button>
         </div>
       </form>
     </Card>
   );
 }
 
-export default NewItemForm;
+export default NewMeetupForm;
