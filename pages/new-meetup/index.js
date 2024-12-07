@@ -1,5 +1,5 @@
 // our-dimain.com/new-meetup
-import NewItemForm from '../../components/meetups/NewItemForm';
+import NewItemForm from '../../components/meetups/NewMeetupForm';
 import { useRouter } from 'next/router';
 import GlobalContext from "../store/globalContext";
 import { useContext } from 'react';
