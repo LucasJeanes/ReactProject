@@ -143,6 +143,29 @@ export function GlobalContextProvider(props) {
                 return newGlobals;
             });
         }
+        if (command.cmd == 'deleteMeeting') {
+            console.log("Sending delete request for meetingId:", command.meetingId);
+            const response = await fetch('/api/delete-meetup', {
+                method: 'POST',
+                body: JSON.stringify({ meetingId: command.meetingId }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            console.log("Received response:", data);
+            if (data.success) {
+                setGlobals((previousGlobals) => {
+                    const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+                    newGlobals.meetings = newGlobals.meetings.filter(meeting => meeting.meetingId !== command.meetingId);
+                    return newGlobals;
+                });
+                console.log("Meeting deleted successfully");
+            } else {
+                alert('Failed to delete meeting');
+                console.log("Failed to delete meeting. Server response:", data);
+            }
+        }
     }
 
     const context = {
