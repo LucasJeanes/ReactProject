@@ -6,86 +6,7 @@
 
 
 // globalContext.js
-
 import { createContext, useState, useEffect } from 'react';
-
-const GlobalContext = createContext();
-
-export function GlobalContextProvider(props) {
-    const [globals, setGlobals] = useState({
-        aString: 'init val',
-        count: 0,
-        hideHamMenu: true,
-        meetings: [], // Contains all meetups
-        dataLoaded: false,
-    });
-
-    useEffect(() => {
-        getAllMeetings();
-    }, []);
-
-    async function getAllMeetings() {
-        const response = await fetch('/api/get-meetings', {
-            method: 'POST',
-            body: JSON.stringify({ meetups: 'all' }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        const data = await response.json();
-        setGlobals((previousGlobals) => {
-            const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
-            newGlobals.meetings = data.meetings;
-            newGlobals.dataLoaded = true;
-            return newGlobals;
-        });
-    }
-
-    async function editGlobalData(command) {
-        if (command.cmd === 'hideHamMenu') {
-            setGlobals((previousGlobals) => {
-                const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
-                newGlobals.hideHamMenu = command.newVal;
-                return newGlobals;
-            });
-        }
-
-        if (command.cmd === 'addMeeting') {
-            const response = await fetch('/api/new-meetup', {
-                method: 'POST',
-                body: JSON.stringify(command.newVal),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const data = await response.json();
-            setGlobals((previousGlobals) => {
-                const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
-                newGlobals.meetings.push(command.newVal);
-                return newGlobals;
-            });
-        }
-    }
-
-    const context = {
-        updateGlobals: editGlobalData,
-        theGlobalObject: globals,
-    };
-
-    return (
-        <GlobalContext.Provider value={context}>
-            {props.children}
-        </GlobalContext.Provider>
-    );
-}
-
-export default GlobalContext;
-
-
-
-
-
-/*import { createContext, useState, useEffect } from 'react';
 
 const GlobalContext = createContext();
 
@@ -157,8 +78,8 @@ export function GlobalContextProvider(props) {
             if (data.success) {
                 setGlobals((previousGlobals) => {
                     const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
-                    newGlobals.meetings = newGlobals.meetings.filter(meeting => meeting.meetingId !== command.meetingId);
-                    return newGlobals;
+                    newGlobals.meetings = newGlobals.meetings.filter(meeting => meeting.meetingId !== command.meetingId); //This creates a new meeting array exluding the meeting we deleted earlier
+                    return newGlobals;                                                                                    //and updates the global state to this new array
                 });
                 console.log("Meeting deleted successfully");
             } else {
@@ -182,7 +103,6 @@ export function GlobalContextProvider(props) {
 
 export default GlobalContext;
 
-*/
 
 
 
